@@ -1,0 +1,42 @@
+ATLAS DIFFERENCES BETWEEN ABIDE 1 AND 2
+======================================================================
+
+ABIDE 1 - CC200 (Craddock 200):
+  - 200 regions of interest (ROIs) in cortex
+  - Based on spectral clustering of functional connectivity
+  - Parcellation: http://www.nitrc.org/projects/fcon_1000/
+  - Time series format: .1D (whitespace-separated values)
+  - Pipeline: CPAC (nofilt_noglobal strategy)
+  - Reference: Craddock et al. (2012)
+
+ABIDE 2 - Gordon2014 + FreeSurfer Subcortical:
+  - 333 ROIs total: 333 cortical parcels from Gordon et al. (2016)
+    * FreeSurfer subcortical structures appended (varies by pipeline)
+    * Combined parcellation used by DCAN/fMRIPrep default output
+  - Based on network analysis and anatomical definitions
+  - Parcellation: fMRIPrep default
+  - Time series format: .ptseries.nii (CIFTI format via DCAN)
+  - Pipeline: DCAN (fMRIPrep-based)
+  - Reference: Gordon et al. (2016)
+
+IMPORTANT IMPLICATIONS:
+  ✗ NO 1-to-1 MAPPING between CC200 and Gordon2014
+  ✗ Different spatial resolutions (200 vs 333 ROIs)
+  ✗ Different anatomical definitions and boundaries
+  ✗ Different preprocessing pipelines (CPAC vs DCAN/fMRIPrep)
+  ✗ Different atlases make direct FC comparison problematic
+
+RECOMMENDATIONS:
+  1. COMPARE WITHIN DATASETS: Analyze ABIDE1 separately from ABIDE2
+  2. STANDARDIZE TO COMMON SPACE:
+     - Option A: Resample both to a standard atlas (e.g., AAL, Schaefer)
+       using nilearn.image.resample_to_img()
+     - Option B: Resample time series to common voxel grid, then re-parcellate
+  3. HARMONIZATION: Use ComBat or similar harmonization if comparing phenotypes
+  4. DESCRIBE LIMITATIONS: Always mention atlas differences in results
+
+NEXT STEPS:
+  - For cross-dataset FC analysis: resample both datasets to Schaefer-400
+    or other common atlas using nilearn
+  - For phenotypic comparisons: proceed with current analysis (phenotype-independent)
+  - Document atlas choice clearly in any publications
